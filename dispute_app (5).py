@@ -17,7 +17,7 @@ st.markdown("""
 * { font-family: 'Inter', sans-serif; }
 
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #0a0f2c 0%, #0d1b3e 40%, #1a0a2e 100%);
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 40%, #e0f2fe 100%);
     min-height: 100vh;
 }
 
@@ -29,9 +29,9 @@ st.markdown("""
     width: 200%;
     height: 200%;
     background:
-        radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(168,85,247,0.12) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(59,130,246,0.08) 0%, transparent 60%);
+        radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(59,130,246,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(147,197,253,0.1) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
 }
@@ -42,10 +42,10 @@ st.markdown("""
 
 /* ── Glass Card ── */
 .glass-card {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.55);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.8);
     border-radius: 20px;
     padding: 28px 32px;
     margin-bottom: 20px;
@@ -53,10 +53,10 @@ st.markdown("""
 
 /* ── Header ── */
 .glass-header {
-    background: rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.6);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.85);
     border-radius: 20px;
     padding: 22px 28px;
     margin-bottom: 24px;
@@ -66,7 +66,7 @@ st.markdown("""
 }
 
 .header-title {
-    color: #ffffff;
+    color: #1e3a5f;
     font-size: 1.75rem;
     font-weight: 700;
     margin: 0;
@@ -74,7 +74,7 @@ st.markdown("""
 }
 
 .header-subtitle {
-    color: rgba(255,255,255,0.5);
+    color: #4a6fa5;
     font-size: 0.82rem;
     margin: 3px 0 0 0;
 }
@@ -101,9 +101,9 @@ st.markdown("""
     justify-content: center;
     font-size: 0.78rem;
     font-weight: 600;
-    border: 1.5px solid rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.4);
-    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(99,102,241,0.25);
+    color: #93a8d4;
+    background: rgba(255,255,255,0.4);
 }
 .step-circle.active {
     background: linear-gradient(135deg, #6366f1, #a855f7);
@@ -111,28 +111,28 @@ st.markdown("""
     color: white;
 }
 .step-circle.done {
-    background: rgba(99,102,241,0.3);
+    background: rgba(99,102,241,0.15);
     border-color: #6366f1;
-    color: #a5b4fc;
+    color: #6366f1;
 }
 .step-label {
     font-size: 0.78rem;
-    color: rgba(255,255,255,0.4);
+    color: #93a8d4;
     font-weight: 500;
 }
-.step-label.active { color: #c4b5fd; }
+.step-label.active { color: #6366f1; }
 .step-label.done   { color: #818cf8; }
 .step-line {
     width: 48px;
     height: 1.5px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(99,102,241,0.15);
     margin: 0 4px;
 }
 .step-line.done { background: #6366f1; }
 
 /* ── Card title ── */
 .card-title {
-    color: rgba(255,255,255,0.9);
+    color: #1e3a5f;
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 16px;
@@ -140,7 +140,7 @@ st.markdown("""
 
 /* ── Section label ── */
 .section-label {
-    color: rgba(255,255,255,0.45);
+    color: #4a6fa5;
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 1.1px;
@@ -153,19 +153,19 @@ st.markdown("""
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(99,102,241,0.2);
-    border: 1px solid rgba(99,102,241,0.4);
+    background: rgba(99,102,241,0.1);
+    border: 1px solid rgba(99,102,241,0.3);
     border-radius: 999px;
     padding: 5px 14px;
     font-size: 0.8rem;
-    color: #c4b5fd;
+    color: #6366f1;
     margin-bottom: 14px;
 }
 
 /* ── File uploader ── */
 [data-testid="stFileUploader"] {
-    background: rgba(255,255,255,0.03) !important;
-    border: 1.5px dashed rgba(255,255,255,0.2) !important;
+    background: rgba(255,255,255,0.4) !important;
+    border: 1.5px dashed rgba(99,102,241,0.35) !important;
     border-radius: 14px !important;
 }
 [data-testid="stFileUploader"]:hover {
@@ -221,13 +221,13 @@ div[data-testid="stDownloadButton"] > button:hover {
 
 /* ── Alerts ── */
 [data-testid="stAlert"] {
-    background: rgba(255,255,255,0.05) !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
+    background: rgba(255,255,255,0.5) !important;
+    border: 1px solid rgba(99,102,241,0.2) !important;
     border-radius: 12px !important;
-    color: rgba(255,255,255,0.7) !important;
+    color: #1e3a5f !important;
 }
 
-p, label, span, div { color: rgba(255,255,255,0.8); }
+p, label, span, div { color: #1e3a5f; }
 </style>
 """, unsafe_allow_html=True)
 
