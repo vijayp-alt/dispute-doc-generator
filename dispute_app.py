@@ -4,33 +4,23 @@ from docx import Document
 from docx2pdf import convert
 import os
 import tempfile
-import base64
 
 st.set_page_config(page_title="Dispute Document Generator", layout="centered")
 
-# Display Nium logo
-def get_image_base64(image_path):
-    with open(image_path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
+# ✅ Replace this with your GitHub raw image URL
+# Format: https://raw.githubusercontent.com/<username>/<repo>/<branch>/<path-to-image>
+LOGO_URL = "https://raw.githubusercontent.com/vijayp-alt/dispute-doc-generator/main/image.webp"
 
 # Header with logo and title side by side
-logo_path = "nium_logo.webp"  # Place your Nium logo image in the same directory as this script
-
-if os.path.exists(logo_path):
-    logo_b64 = get_image_base64(logo_path)
-    st.markdown(
-        f"""
-        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
-            <img src="data:image/webp;base64,{logo_b64}" width="80"/>
-            <h1 style="margin: 0; font-size: 2rem;">Dispute Document Generator</h1>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-else:
-    # Fallback: just show the title if image not found
-    st.warning("Logo image 'nium_logo.webp' not found. Place it in the same directory as this script.")
-    st.title("📄 Dispute Document Generator")
+st.markdown(
+    f"""
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+        <img src="{LOGO_URL}" width="80" onerror="this.style.display='none'"/>
+        <h1 style="margin: 0; font-size: 2rem;">Dispute Document Generator</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 st.markdown("---")
 
