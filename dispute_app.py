@@ -7,71 +7,196 @@ import tempfile
 
 st.set_page_config(page_title="Dispute Document Generator", layout="centered")
 
-# ✅ Replace this with your GitHub raw image URL
-# Format: https://raw.githubusercontent.com/<username>/<repo>/<branch>/<path-to-image>
 LOGO_URL = "https://raw.githubusercontent.com/vijayp-alt/dispute-doc-generator/main/image.webp"
 
-# Header with logo and title side by side
-st.markdown(
-    f"""
-    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
-        <img src="{LOGO_URL}" width="80" onerror="this.style.display='none'"/>
-        <h1 style="margin: 0; font-size: 2rem;">Dispute Document Generator</h1>
+# ── Global Dark Theme + Background Pattern ──────────────────────────────────
+st.markdown("""
+<style>
+/* ── Page background with subtle dot pattern ── */
+[data-testid="stAppViewContainer"] {
+    background-color: #0f1117;
+    background-image: radial-gradient(circle, #2a2d3a 1px, transparent 1px);
+    background-size: 28px 28px;
+}
+
+[data-testid="stHeader"] {
+    background-color: transparent;
+}
+
+/* ── Hide default Streamlit decorations ── */
+#MainMenu, footer {visibility: hidden;}
+
+/* ── Card style ── */
+.card {
+    background: #1c1f2e;
+    border: 1px solid #2e3250;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+/* ── Header banner ── */
+.header-banner {
+    background: linear-gradient(135deg, #1a1d2e 0%, #12152a 100%);
+    border: 1px solid #2e3250;
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+}
+
+.header-title {
+    color: #ffffff;
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.header-subtitle {
+    color: #7b82a8;
+    font-size: 0.85rem;
+    margin: 4px 0 0 0;
+}
+
+/* ── Section label ── */
+.section-label {
+    color: #a0a8cc;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* ── Card title ── */
+.card-title {
+    color: #e2e6ff;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ── Override Streamlit file uploader ── */
+[data-testid="stFileUploader"] {
+    background: #12152a !important;
+    border: 1.5px dashed #3a3f6e !important;
+    border-radius: 12px !important;
+}
+
+div[data-testid="stButton"] > button {
+    background: linear-gradient(135deg, #6c63ff, #a78bfa);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+div[data-testid="stButton"] > button:hover {
+    opacity: 0.88;
+}
+
+p, label, span, div {
+    color: #c8cde8;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ── Header Card ─────────────────────────────────────────────────────────────
+st.markdown(f"""
+<div class="header-banner">
+    <img src="{LOGO_URL}" width="72" onerror="this.style.display='none'" style="border-radius:10px;"/>
+    <div>
+        <p class="header-title">Dispute Document Generator</p>
+        <p class="header-subtitle">Upload your Excel data and Word template to generate a dispute PDF instantly.</p>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+</div>
+""", unsafe_allow_html=True)
 
-st.markdown("---")
+# ── Upload Card ──────────────────────────────────────────────────────────────
+st.markdown('<div class="card">', unsafe_allow_html=True)
+st.markdown('<div class="card-title">📂 Upload Files</div>', unsafe_allow_html=True)
 
-# Upload files
-excel_file = st.file_uploader("Upload Excel File", type=["xls", "xlsx"])
-word_file = st.file_uploader("Upload Word Template", type=["docx"])
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown('<div class="section-label">Excel Data File</div>', unsafe_allow_html=True)
+    excel_file = st.file_uploader("", type=["xls", "xlsx"], key="excel")
+with col2:
+    st.markdown('<div class="section-label">Word Template</div>', unsafe_allow_html=True)
+    word_file = st.file_uploader("", type=["docx"], key="word")
 
-# Start processing
+st.markdown('</div>', unsafe_allow_html=True)
+
+# ── Processing Card ──────────────────────────────────────────────────────────
 if excel_file and word_file:
     try:
         df = pd.read_excel(excel_file, sheet_name=0, engine='openpyxl')
-        st.success("Excel file loaded successfully.")
-        st.dataframe(df)
+
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.markdown('<div class="card-title">📊 Data Preview</div>', unsafe_allow_html=True)
+        st.success("✅ Excel file loaded successfully.")
+        st.dataframe(df, use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
         if 'Field name' in df.columns and 'Value' in df.columns:
             field_map = dict(zip(df['Field name'], df['Value']))
 
-            if st.button("Generate PDF"):
-                with tempfile.TemporaryDirectory() as tmpdir:
-                    temp_doc_path = os.path.join(tmpdir, "updated.docx")
-                    temp_pdf_path = os.path.join(tmpdir, "output.pdf")
+            st.markdown('<div class="card">', unsafe_allow_html=True)
+            st.markdown('<div class="card-title">⚙️ Generate Document</div>', unsafe_allow_html=True)
 
-                    # Load and update Word document
-                    doc = Document(word_file)
+            if st.button("🚀 Generate PDF"):
+                with st.spinner("Processing your document..."):
+                    with tempfile.TemporaryDirectory() as tmpdir:
+                        temp_doc_path = os.path.join(tmpdir, "updated.docx")
+                        temp_pdf_path = os.path.join(tmpdir, "output.pdf")
 
-                    # Replace placeholders in paragraphs
-                    for paragraph in doc.paragraphs:
-                        for key, value in field_map.items():
-                            placeholder = f"<{key}>"
-                            if placeholder in paragraph.text:
-                                paragraph.text = paragraph.text.replace(placeholder, str(value))
+                        doc = Document(word_file)
 
-                    # Replace placeholders in tables
-                    for table in doc.tables:
-                        for row in table.rows:
-                            for cell in row.cells:
-                                for key, value in field_map.items():
-                                    placeholder = f"<{key}>"
-                                    if placeholder in cell.text:
-                                        cell.text = cell.text.replace(placeholder, str(value))
+                        for paragraph in doc.paragraphs:
+                            for key, value in field_map.items():
+                                placeholder = f"<{key}>"
+                                if placeholder in paragraph.text:
+                                    paragraph.text = paragraph.text.replace(placeholder, str(value))
 
-                    doc.save(temp_doc_path)
+                        for table in doc.tables:
+                            for row in table.rows:
+                                for cell in row.cells:
+                                    for key, value in field_map.items():
+                                        placeholder = f"<{key}>"
+                                        if placeholder in cell.text:
+                                            cell.text = cell.text.replace(placeholder, str(value))
 
-                    # Convert to PDF
-                    convert(temp_doc_path, temp_pdf_path)
+                        doc.save(temp_doc_path)
+                        convert(temp_doc_path, temp_pdf_path)
 
-                    with open(temp_pdf_path, "rb") as f:
-                        st.download_button("📥 Download PDF", f, file_name="Dispute_Document.pdf", mime="application/pdf")
+                        with open(temp_pdf_path, "rb") as f:
+                            st.download_button(
+                                "📥 Download Dispute PDF",
+                                f,
+                                file_name="Dispute_Document.pdf",
+                                mime="application/pdf"
+                            )
+
+            st.markdown('</div>', unsafe_allow_html=True)
         else:
-            st.error("Excel file must contain 'Field name' and 'Value' columns.")
+            st.error("⚠️ Excel file must contain 'Field name' and 'Value' columns.")
+
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"❌ Error: {e}")
+
 else:
-    st.info("Please upload both Excel and Word files to begin.")
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+    st.info("👆 Please upload both an Excel file and a Word template above to get started.")
+    st.markdown('</div>', unsafe_allow_html=True)
