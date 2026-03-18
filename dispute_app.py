@@ -189,6 +189,9 @@ if excel_file and word_file:
                         if result.returncode != 0:
                             raise Exception(f"LibreOffice conversion failed: {result.stderr}")
 
+                        # LibreOffice names the output after the input file: updated.pdf
+                        temp_pdf_path = os.path.join(tmpdir, "updated.pdf")
+
                         with open(temp_pdf_path, "rb") as f:
                             st.download_button(
                                 "📥 Download Dispute PDF",
