@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from docx import Document
-from docx2pdf import convert
+import subprocess
 import os
 import tempfile
 
@@ -179,7 +179,15 @@ if excel_file and word_file:
                                             cell.text = cell.text.replace(placeholder, str(value))
 
                         doc.save(temp_doc_path)
-                        convert(temp_doc_path, temp_pdf_path)
+
+                        # Convert to PDF using LibreOffice (works on Linux/Streamlit Cloud)
+                        result = subprocess.run(
+                            ["libreoffice", "--headless", "--convert-to", "pdf",
+                             "--outdir", tmpdir, temp_doc_path],
+                            capture_output=True, text=True
+                        )
+                        if result.returncode != 0:
+                            raise Exception(f"LibreOffice conversion failed: {result.stderr}")
 
                         with open(temp_pdf_path, "rb") as f:
                             st.download_button(
